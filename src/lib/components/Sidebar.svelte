@@ -101,8 +101,8 @@
   <span class="nav-spacer"></span>
 
   {#if version}
-    <span class="version-indicator" aria-label="Version {version} Beta">
-      v{version} · Beta
+    <span class="version-indicator" aria-label="Version {version}">
+      v{version}
     </span>
   {/if}
 
