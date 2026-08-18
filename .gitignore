@@ -1,0 +1,54 @@
+# Database & Vector Indices
+*.db
+*.sqlite
+*.sqlite3
+*.usearch
+
+# Dependencies
+node_modules/
+
+# Build outputs
+target/
+src-tauri/target/
+dist/
+/build
+
+# SvelteKit
+/.svelte-kit
+/package
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Graphify (graph.json is large, only commit the report)
+graphify-out/*
+!graphify-out/GRAPH_REPORT.md
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Temporary debugging files (P5-B1)
+*_tmp.txt
+audit_pass*.txt
+AUDIT_FINDINGS.md
+
+# Audit / clippy isolation dirs
+target_clippy/
+graphify-out/
+.kiro/
+.vscode/
+cargo_errors*.txt
+cargo_errors*.json
+static/fonts/*.woff2
+
+# AI Agent files & internal handoffs
+.agent/
+.agents/
+.geminiignore
+agents.md
+docs/history/heimdall_handoff_to_agent.md

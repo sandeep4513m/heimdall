@@ -1,0 +1,98 @@
+[package]
+name = "heimdall"
+version = "0.6.0"
+description = "Local AI desktop chat — Linux-first, runs on 4 GB RAM, no cloud."
+authors = ["Sandeep"]
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/sandeep4513m/heimdall"
+homepage = "https://github.com/sandeep4513m/heimdall"
+keywords = ["ollama", "local-ai", "tauri", "linux", "desktop"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "heimdall_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+tokio-util = "0.7"
+
+# HTTP client for Ollama API
+reqwest = { version = "0.12", features = ["json", "stream"] }
+
+# Async stream utilities (for reqwest byte streams)
+futures-util = "0.3"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Database
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "sqlite"] }
+
+# System information
+sysinfo = "0.30"
+
+# Configuration
+toml = "0.8"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-appender = "0.2"
+
+# Error handling
+anyhow = "1"
+thiserror = "1"
+
+# UUID generation
+uuid = { version = "1", features = ["v4"] }
+
+# Home directory resolution
+dirs = "5"
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Phase 4: RAG Engine
+usearch = "2"
+tiktoken-rs = "0.6"
+pdf = "0.9"
+docx-rs = "0.4"
+walkdir = "2"
+async-trait = "0.1"
+scraper = "0.20"
+ego-tree = "0.6"      # Re-export NodeId from scraper's tree structure
+regex = "1.12.3"
+
+[dev-dependencies]
+# Property-based testing for ModelRegistry (P1–P7 in design.md) and the
+# Phase 6 Governor property suite (P1–P8 in governor-intelligence/design.md)
+proptest = "1.5"
+tempfile = "3"
+# Phase 6: HTTP mock server for /api/ps integration tests (Task 25.1).
+wiremock = "0.6"
+# Phase 6: criterion bench harness for NF1 (chat-stream latency impact, Task 24).
+criterion = "0.5"
+# Phase 6: the `test` feature enables `tauri::test::mock_app()` so the
+# integration tests can construct a Governor against a MockRuntime
+# AppHandle (Tasks 9.3, 25.1).
+tauri = { version = "2", features = ["test"] }
+
+# Phase 6 / NF1 — chat-stream governor overhead benchmark (Task 24).
+[[bench]]
+name = "chat_stream_governor_overhead"
+harness = false

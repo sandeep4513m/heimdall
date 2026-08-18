@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "entries": [
+    { "name": "phi4-mini", "size_mb": 2300, "capabilities": ["chat"], "min_tier": "minimal" },
+    { "name": "qwen2.5:0.5b", "size_mb": 400, "capabilities": ["chat"], "min_tier": "minimal" },
+    { "name": "nomic-embed-text", "size_mb": 274, "capabilities": ["embedding"], "min_tier": "minimal" },
+    { "name": "llama3.2:3b", "size_mb": 2000, "capabilities": ["chat"], "min_tier": "minimal" },
+    { "name": "llava:7b", "size_mb": 4500, "capabilities": ["chat", "vision"], "min_tier": "standard" },
+    { "name": "qwen3:7b", "size_mb": 4700, "capabilities": ["chat", "thinking"], "min_tier": "standard" },
+    { "name": "deepseek-r1:7b", "size_mb": 4700, "capabilities": ["chat", "thinking"], "min_tier": "standard" },
+    { "name": "llama3.3:70b", "size_mb": 40000, "capabilities": ["chat"], "min_tier": "full" }
+  ]
+}

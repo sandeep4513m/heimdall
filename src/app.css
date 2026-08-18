@@ -1,0 +1,132 @@
+/* ── BUNDLED FONTS ────────────────────────────────────────────────
+   Both fonts ship under the SIL Open Font License (OFL) and live in
+   static/fonts/. Loading them locally avoids any network call to
+   fonts.googleapis.com — Heimdall's identity is "no data leaves
+   your machine," which has to be true on the cold-launch path too.
+   See AUDIT P3-A3.
+
+   Subsets are matched to Google Fonts' upstream split:
+   - latin: U+0000–00FF + common punctuation (default for English).
+   - latin-ext: extended Latin (Vietnamese, Polish, Czech, etc).
+   The Cyrillic, Greek, and Vietnamese subsets Google ships are not
+   bundled here — Heimdall is English-default in alpha. Re-add the
+   subsets when localisation lands.
+*/
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url('/fonts/jetbrainsmono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url('/fonts/jetbrainsmono-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/cinzel-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/cinzel-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  /* ── SURFACES ─────────────────────────────── */
+  --bg-app:       #0a0c10;
+  --bg-surface:   #0d1017;
+  --bg-elevated:  #11151e;
+  --bg-titlebar:  #07090d;
+
+  /* ── BORDERS ──────────────────────────────── */
+  --border-subtle: #1e2535;
+  --border-dim:    #2e3450;
+  --border-warm:   #3a2e10;
+
+  /* ── GOLD ACCENT ──────────────────────────── */
+  --gold-primary: #c8a96e;
+  --gold-dim:     #7a6820;
+  --gold-bg:      #1a1508;
+
+  /* ── STATUS ───────────────────────────────── */
+  --status-ok-text:     #4a9e6a;
+  --status-ok-bg:       #0f2a18;
+  --status-ok-border:   #1e4a2e;
+  --status-warn-text:   #c8832a;
+  --status-warn-bg:     #1a0d08;
+  --status-warn-border: #4a2a18;
+  --status-danger-text: #9e4a4a;
+  --status-danger-bg:   #1a0808;
+
+  /* ── ACCENT (semantic) ────────────────────── */
+  /* High-contrast accents for inline status text and destructive actions.
+     Distinct from --status-* which is for filled status banners.        */
+  --accent-green: #4a9e6a;
+  --accent-red:   #c14a4a;
+
+  /* ── TEXT ─────────────────────────────────── */
+  --text-primary:   #e8e4d9;
+  --text-secondary: #c8c4b8;
+  --text-muted:     #b8b4a8;
+  --text-dim:       #8a8fa8;
+  --text-ghost:     #4a5068;
+  --text-code:      #7a9fbc;
+
+  /* ── TYPOGRAPHY ───────────────────────────── */
+  --font-ui:    'JetBrains Mono', monospace;
+  --font-brand: 'Cinzel', serif;
+
+  /* ── SPACING ──────────────────────────────── */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  12px;
+  --space-lg:  16px;
+  --space-xl:  20px;
+  --space-xxl: 24px;
+
+  /* ── RADIUS ───────────────────────────────── */
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-pill: 20px;
+
+  /* ── SHADOWS ──────────────────────────────── */
+  --shadow-elevated: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-popover:  0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ── GLOBAL RESETS ────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  overflow: hidden;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heimdall — UI Reference Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1e2e; padding: 40px; font-family: 'JetBrains Mono', monospace; }
+
+  /* ── DESIGN TOKEN REFERENCE ───────────────────────────────────── */
+  /*
+    SURFACES
+    bg.app       #0a0c10
+    bg.surface   #0d1017
+    bg.elevated  #11151e
+    bg.titlebar  #07090d
+
+    BORDERS
+    border.subtle  #1e2535
+    border.dim     #2e3450
+    border.warm    #3a2e10
+
+    GOLD ACCENT
+    gold.primary   #c8a96e
+    gold.dim       #7a6820
+    gold.bg        #1a1508
+
+    STATUS
+    ok.text        #4a9e6a
+    ok.bg          #0f2a18
+    ok.border      #1e4a2e
+    warn.text      #c8832a
+    warn.bg        #1a0d08
+    warn.border    #4a2a18
+
+    TEXT
+    text.primary   #e8e4d9
+    text.secondary #c8c4b8
+    text.muted     #b8b4a8
+    text.dim       #8a8fa8
+    text.ghost     #4a5068
+
+    FONTS
+    UI:    'JetBrains Mono', monospace  — ALL interface text
+    Brand: 'Cinzel', serif             — logo + section titles ONLY
+
+    SPACING: 4 / 8 / 12 / 16 / 20 / 24px
+    RADIUS:  4 / 6 / 8 / 12 / 20px (pill)
+  */
+
+  .app-frame {
+    background: #0a0c10;
+    color: #e8e4d9;
+    font-family: 'JetBrains Mono', monospace;
+    width: 860px;
+    height: 600px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 0.5px solid #1e2535;
+    margin: 0 auto;
+  }
+
+  /* TITLEBAR */
+  .titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 38px;
+    background: #07090d;
+    border-bottom: 0.5px solid #1e2535;
+    -webkit-app-region: drag;
+    flex-shrink: 0;
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 10px; }
+  .logo-text { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 600; letter-spacing: 0.15em; color: #c8a96e; }
+  .logo-sub { font-size: 9px; letter-spacing: 0.3em; color: #4a5068; margin-top: 1px; text-transform: uppercase; }
+  .win-controls { display: flex; gap: 7px; -webkit-app-region: no-drag; }
+  .wc { width: 12px; height: 12px; border-radius: 50%; }
+  .wc-r { background: #3a1a1a; border: 0.5px solid #6b2a2a; }
+  .wc-y { background: #3a2d1a; border: 0.5px solid #7a5a1a; }
+  .wc-g { background: #1a2e1a; border: 0.5px solid #2a6a2a; }
+
+  /* BODY */
+  .app-body { display: flex; flex: 1; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 52px;
+    background: #07090d;
+    border-right: 0.5px solid #1e2535;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .nav-btn {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    border: 0.5px solid transparent;
+    font-size: 16px;
+    color: #4a5068;
+    position: relative;
+    transition: all 0.15s;
+  }
+  .nav-btn.active { background: #11151e; border-color: #1e2535; color: #c8a96e; }
+  .nav-btn:hover:not(.active) { color: #8a8fa8; }
+  .nav-spacer { flex: 1; }
+  .nav-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: #c8a96e;
+    position: absolute; top: 6px; right: 6px;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* MAIN PANEL */
+  .main-panel { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    background: #07090d;
+    border-bottom: 0.5px solid #1e2535;
+    padding: 0 12px;
+    flex-shrink: 0;
+  }
+  .tab {
+    padding: 9px 14px;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #4a5068; cursor: pointer;
+    border-bottom: 1.5px solid transparent;
+    margin-bottom: -0.5px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tab.active { color: #c8a96e; border-bottom-color: #c8a96e; }
+
+  /* CHAT PANEL */
+  .chat-panel {
+    flex: 1; padding: 20px 20px 0;
+    display: flex; flex-direction: column; gap: 16px;
+    overflow-y: auto;
+  }
+  .model-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #11151e; border: 0.5px solid #1e2535;
+    border-radius: 20px; padding: 4px 12px 4px 8px;
+    font-size: 10px; color: #6b7394; letter-spacing: 0.08em;
+    align-self: flex-start;
+  }
+  .model-dot { width: 6px; height: 6px; border-radius: 50%; background: #2a6e3a; }
+  .msg { display: flex; gap: 12px; align-items: flex-start; }
+  .msg-avatar {
+    width: 26px; height: 26px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0; margin-top: 1px; font-weight: 500;
+  }
+  .msg-avatar.user { background: #1a1e2e; border: 0.5px solid #2e3450; color: #8a8fa8; }
+  .msg-avatar.ai   { background: #1a1508; border: 0.5px solid #3a2e10; }
+  .msg-bubble { font-size: 12px; line-height: 1.7; color: #b8b4a8; max-width: 560px; }
+  .msg-bubble.ai { color: #c8c4b8; }
+  .msg-code {
+    background: #0d1017; border: 0.5px solid #1e2535;
+    border-radius: 6px; padding: 8px 12px;
+    font-size: 11px; color: #7a9fbc; margin-top: 6px;
+    letter-spacing: 0.02em; white-space: pre;
+  }
+
+  /* GOVERNOR PANEL */
+  .gov-panel { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; }
+  .gov-header { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.2em; color: #4a5068; text-transform: uppercase; }
+  .resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .res-card { background: #0d1017; border: 0.5px solid #1e2535; border-radius: 8px; padding: 12px; }
+  .res-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #4a5068; margin-bottom: 6px; }
+  .res-val { font-size: 22px; font-weight: 300; line-height: 1; margin-bottom: 8px; }
+  .res-val.warn { color: #c8832a; }
+  .res-val.ok   { color: #6aba8a; }
+  .res-bar-bg { height: 3px; background: #1e2535; border-radius: 2px; overflow: hidden; }
+  .res-bar { height: 100%; border-radius: 2px; }
+  .res-bar.warn { background: #c8832a; }
+  .res-bar.ok   { background: #4a9e6a; }
+  .model-list-header { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #4a5068; }
+  .model-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 10px; background: #0d1017;
+    border: 0.5px solid #1e2535; border-radius: 6px;
+  }
+  .model-info { display: flex; flex-direction: column; gap: 2px; }
+  .model-name { font-size: 11px; color: #a8a4a0; letter-spacing: 0.04em; }
+  .model-size { font-size: 9px; color: #4a5068; letter-spacing: 0.08em; }
+  .status-badge {
+    font-size: 9px; padding: 3px 8px; border-radius: 4px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .status-badge.loaded { background: #0f2a18; color: #4a9e6a; border: 0.5px solid #1e4a2e; }
+  .status-badge.idle   { background: #1a1508; color: #7a6820; border: 0.5px solid #3a2e10; }
+  .unload-btn {
+    font-size: 9px; padding: 3px 8px; border-radius: 4px;
+    background: #1a0d0d; color: #7a3a3a;
+    border: 0.5px solid #3a1a1a; cursor: pointer;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-left: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .gov-alert {
+    background: #1a0d08; border: 0.5px solid #4a2a18;
+    border-radius: 6px; padding: 9px 12px;
+    font-size: 10px; color: #c8832a; letter-spacing: 0.05em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .alert-dot { width: 6px; height: 6px; border-radius: 50%; background: #c8832a; flex-shrink: 0; animation: pulse 1.5s infinite; }
+
+  /* SHORTCUT PANEL */
+  .shortcut-panel { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; }
+  .shortcut-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 10px; background: #0d1017;
+    border: 0.5px solid #1e2535; border-radius: 6px; cursor: pointer;
+  }
+  .shortcut-row:hover { border-color: #2e3450; }
+  .shortcut-action { font-size: 12px; color: #a8a4a0; }
+  .key-badges { display: flex; gap: 4px; }
+  .key-badge {
+    font-size: 9px; padding: 3px 8px; border-radius: 4px;
+    background: #1a1508; color: #7a6820;
+    border: 0.5px solid #3a2e10; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .add-shortcut-btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 8px; background: transparent;
+    border: 0.5px dashed #2e3450; border-radius: 6px;
+    color: #4a5068; font-size: 10px; letter-spacing: 0.1em;
+    cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+  }
+
+  /* INPUT BAR */
+  .input-bar {
+    padding: 12px 16px 14px;
+    border-top: 0.5px solid #1e2535;
+    display: flex; align-items: center; gap: 10px;
+    background: #07090d; flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1; background: #0d1017;
+    border: 0.5px solid #1e2535; border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: #8a8fa8; outline: none;
+    letter-spacing: 0.04em;
+  }
+  .chat-input::placeholder { color: #4a5068; }
+  .send-btn {
+    width: 32px; height: 32px;
+    background: #1a1508; border: 0.5px solid #3a2e10;
+    border-radius: 8px; display: flex;
+    align-items: center; justify-content: center;
+    cursor: pointer; font-size: 14px; color: #c8a96e;
+  }
+
+  /* HIDDEN PANELS */
+  .panel { display: none; }
+  .panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+</style>
+</head>
+<body>
+
+<div class="app-frame">
+
+  <!-- TITLEBAR -->
+  <div class="titlebar">
+    <div class="logo-wrap">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="14,2 26,14 14,26 2,14" fill="none" stroke="#c8a96e" stroke-width="0.8" opacity="0.4"/>
+        <polygon points="14,5 23,14 14,23 5,14" fill="none" stroke="#c8a96e" stroke-width="0.6" opacity="0.6"/>
+        <ellipse cx="14" cy="14" rx="5" ry="5" fill="none" stroke="#c8a96e" stroke-width="1"/>
+        <ellipse cx="14" cy="14" rx="2" ry="2" fill="#c8a96e"/>
+        <line x1="14" y1="2" x2="14" y2="7" stroke="#c8a96e" stroke-width="1" opacity="0.8"/>
+        <line x1="14" y1="21" x2="14" y2="26" stroke="#c8a96e" stroke-width="1" opacity="0.8"/>
+        <line x1="2" y1="14" x2="7" y2="14" stroke="#c8a96e" stroke-width="1" opacity="0.8"/>
+        <line x1="21" y1="14" x2="26" y2="14" stroke="#c8a96e" stroke-width="1" opacity="0.8"/>
+      </svg>
+      <div>
+        <div class="logo-text">HEIMDALL</div>
+        <div class="logo-sub">Local AI Gateway</div>
+      </div>
+    </div>
+    <div class="win-controls">
+      <div class="wc wc-r"></div>
+      <div class="wc wc-y"></div>
+      <div class="wc wc-g"></div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="app-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="nav-btn active" id="nav-chat" onclick="showPanel('chat')" title="Chat">
+        <i class="ti ti-message-2"></i>
+      </div>
+      <div class="nav-btn" id="nav-gov" onclick="showPanel('gov')" title="Governor">
+        <i class="ti ti-cpu"></i>
+        <div class="nav-dot"></div>
+      </div>
+      <div class="nav-btn" id="nav-keys" onclick="showPanel('keys')" title="Shortcuts">
+        <i class="ti ti-keyboard"></i>
+      </div>
+      <div class="nav-spacer"></div>
+      <div class="nav-btn" title="Settings">
+        <i class="ti ti-settings"></i>
+      </div>
+    </div>
+
+    <!-- MAIN PANEL -->
+    <div class="main-panel">
+
+      <!-- TABS: CHAT -->
+      <div class="tabs" id="tabs-chat">
+        <div class="tab active">Chat</div>
+        <div class="tab" style="color:#3a4058">History</div>
+        <div class="tab" style="color:#3a4058">Models</div>
+      </div>
+
+      <!-- TABS: GOVERNOR -->
+      <div class="tabs" id="tabs-gov" style="display:none">
+        <div class="tab active">Governor</div>
+        <div class="tab" style="color:#3a4058">Process Watch</div>
+      </div>
+
+      <!-- TABS: SHORTCUTS -->
+      <div class="tabs" id="tabs-keys" style="display:none">
+        <div class="tab active">Shortcuts</div>
+        <div class="tab" style="color:#3a4058">Custom</div>
+      </div>
+
+      <!-- CHAT PANEL -->
+      <div class="panel active" id="panel-chat">
+        <div class="chat-panel">
+          <div class="model-badge">
+            <div class="model-dot"></div>
+            llama3.2:3b — 2.0 GB loaded
+          </div>
+          <div class="msg">
+            <div class="msg-avatar user">U</div>
+            <div class="msg-bubble">Write a Python function that reads a CSV and returns a pandas DataFrame with null values dropped.</div>
+          </div>
+          <div class="msg">
+            <div class="msg-avatar ai">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <polygon points="7,1 13,7 7,13 1,7" fill="none" stroke="#c8a96e" stroke-width="0.7"/>
+                <circle cx="7" cy="7" r="2" fill="#c8a96e"/>
+              </svg>
+            </div>
+            <div class="msg-bubble ai">
+              Here's a clean implementation:
+              <div class="msg-code">import pandas as pd
+
+def load_csv(path: str) -> pd.DataFrame:
+    """Load CSV and drop all null rows."""
+    df = pd.read_csv(path)
+    return df.dropna()</div>
+            </div>
+          </div>
+          <div class="msg">
+            <div class="msg-avatar user">U</div>
+            <div class="msg-bubble">Can you add error handling for missing files?</div>
+          </div>
+        </div>
+        <div class="input-bar">
+          <input class="chat-input" type="text" placeholder="Ask Heimdall...">
+          <div class="send-btn"><i class="ti ti-arrow-up"></i></div>
+        </div>
+      </div>
+
+      <!-- GOVERNOR PANEL -->
+      <div class="panel" id="panel-gov">
+        <div class="gov-panel">
+          <div class="gov-header">System Resources</div>
+          <div class="resource-grid">
+            <div class="res-card">
+              <div class="res-label">RAM</div>
+              <div class="res-val warn">73%</div>
+              <div class="res-bar-bg"><div class="res-bar warn" style="width:73%"></div></div>
+            </div>
+            <div class="res-card">
+              <div class="res-label">CPU</div>
+              <div class="res-val ok">31%</div>
+              <div class="res-bar-bg"><div class="res-bar ok" style="width:31%"></div></div>
+            </div>
+            <div class="res-card">
+              <div class="res-label">VRAM</div>
+              <div class="res-val warn">88%</div>
+              <div class="res-bar-bg"><div class="res-bar warn" style="width:88%"></div></div>
+            </div>
+            <div class="res-card">
+              <div class="res-label">Swap</div>
+              <div class="res-val ok">12%</div>
+              <div class="res-bar-bg"><div class="res-bar ok" style="width:12%"></div></div>
+            </div>
+          </div>
+          <div class="model-list-header">Loaded Models</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div class="model-row">
+              <div class="model-info">
+                <div class="model-name">llama3.2:3b</div>
+                <div class="model-size">2.0 GB · active 4m ago</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:4px">
+                <div class="status-badge loaded">loaded</div>
+              </div>
+            </div>
+            <div class="model-row">
+              <div class="model-info">
+                <div class="model-name">deepseek-coder:6.7b</div>
+                <div class="model-size">3.8 GB · idle 18m ago</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:4px">
+                <div class="status-badge idle">idle</div>
+                <div class="unload-btn">unload</div>
+              </div>
+            </div>
+          </div>
+          <div class="gov-alert">
+            <div class="alert-dot"></div>
+            VRAM pressure detected — governor recommends unloading idle models
+          </div>
+        </div>
+      </div>
+
+      <!-- SHORTCUT PANEL -->
+      <div class="panel" id="panel-keys">
+        <div class="shortcut-panel">
+          <div class="gov-header">Shortcut Manager</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div class="shortcut-row">
+              <div class="shortcut-action">New Chat</div>
+              <div class="key-badges">
+                <div class="key-badge">Ctrl</div>
+                <div class="key-badge">N</div>
+              </div>
+            </div>
+            <div class="shortcut-row">
+              <div class="shortcut-action">Switch Model</div>
+              <div class="key-badges">
+                <div class="key-badge">Ctrl</div>
+                <div class="key-badge">M</div>
+              </div>
+            </div>
+            <div class="shortcut-row">
+              <div class="shortcut-action">Open Governor</div>
+              <div class="key-badges">
+                <div class="key-badge">Ctrl</div>
+                <div class="key-badge">G</div>
+              </div>
+            </div>
+            <div class="shortcut-row">
+              <div class="shortcut-action">Toggle Sidebar</div>
+              <div class="key-badges">
+                <div class="key-badge">Ctrl</div>
+                <div class="key-badge">B</div>
+              </div>
+            </div>
+          </div>
+          <div class="add-shortcut-btn">
+            <i class="ti ti-plus" style="font-size:12px"></i>
+            Add Shortcut
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function showPanel(name) {
+  ['chat','gov','keys'].forEach(p => {
+    document.getElementById('panel-' + p).classList.toggle('active', p === name);
+    const tabs = document.getElementById('tabs-' + p);
+    if (tabs) tabs.style.display = p === name ? 'flex' : 'none';
+    document.getElementById('nav-' + p)?.classList.toggle('active', p === name);
+  });
+}
+</script>
+</body>
+</html>
