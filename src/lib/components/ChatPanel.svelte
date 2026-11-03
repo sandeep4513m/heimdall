@@ -287,7 +287,6 @@
       await checkHealth();
       await loadModels();
       await loadUserPreferences();
-      await loadLastConversation();
       await loadConversations();
       await ragStore.loadCollections();
       await memoryStore.loadFacts();
@@ -356,50 +355,6 @@
         const chatModel = models.find(m => m.capability !== 'embedding');
         selectedModel = chatModel?.name ?? models[0].name;
       }
-    }
-  }
-
-  async function loadLastConversation() {
-    try {
-      const conversations = await invoke<Conversation[]>('list_conversations');
-      if (conversations.length === 0) return;
-
-      const latest = conversations[0]; // Already sorted by updated_at DESC
-      conversationId = latest.id;
-      conversationCreated = true;
-
-      // Restore the model used in that conversation only if the user hasn't explicitly
-      // set a default model preference.
-      if (!userHasDefaultModel && latest.model && models.some(m => m.name === latest.model)) {
-        selectedModel = latest.model!;
-      }
-
-      const backendMessages = await invoke<BackendMessage[]>('get_messages', {
-        conversationId: latest.id,
-      });
-
-      messages = backendMessages
-        .filter(m => m.role !== 'system')
-        .map(m => backendToChat(m));
-
-      try {
-        const collections = await invoke<string[]>('get_active_collections', { conversationId: latest.id });
-        activeCollections = collections || [];
-      } catch {
-        activeCollections = [];
-      }
-
-      try {
-        memoryEnabled = await memoryStore.getConversationMemory(latest.id);
-      } catch {
-        memoryEnabled = true;
-      }
-
-      if (messages.length > 0) {
-        scrollToBottom(true);
-      }
-    } catch {
-      // Silently fall back to fresh conversation
     }
   }
 
