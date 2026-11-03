@@ -1,5 +1,5 @@
 [package]
-name = "heimdall"
+name = "heimdall-ai"
 version = "0.6.0"
 description = "Local AI desktop chat — Linux-first, runs on 4 GB RAM, no cloud."
 authors = ["Sandeep"]
